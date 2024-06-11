@@ -1,0 +1,16 @@
+.animateds {
+    display: inline-block; /* Allow character breaks */
+    font-size: 3rem; /* Adjust font size as needed */
+    opacity: 0; /* Initial opacity for hidden text */
+    overflow: hidden; /* Clip overflowing characters */
+  }
+  
+  .animateds span {
+    display: inline-block;
+    animation: show-text 1s ease-in-out forwards;
+  }
+  
+  @keyframes show-text {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }

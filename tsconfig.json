@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "target": "es2021",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": false,
+    "strict": false,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "tailwind.config.js",
+    "src/components/ui/accordion.tsx",
+    "app/api/assistant/route.js",
+    "app/components/AccordionDemo.jsx",
+    "app/components/Footer.jsx",
+    "app/components/Header.jsx",
+    "app/components/HomePage.jsx",
+    "app/components/QuestionCard.jsx",
+    "app/components/SwipeCarousol.jsx",
+    "app/tour/page.jsx",
+    "app/page.jsx",
+    "app/[locale]/layout.jsx",
+    ".next/types/app/healthcare/info/[id]/page.jsx",
+    ".next/types/app/healthcare/info/page.jsx"
+  ],
+  "exclude": ["node_modules"]
+}
