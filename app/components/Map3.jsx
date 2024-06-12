@@ -70,38 +70,45 @@ export default function Home() {
   ]
   
   useEffect(() => {
-    getGooglePlace();
-  }, [category, radius]);
-
-  const getGooglePlace = () => {
-    if (category) {
+    if (category && userLocation) { // Ensure both category and userLocation are available
       setLoading(true);
-
+  
       GlobalApi.getGooglePlace(
         category,
         radius,
         userLocation.lat,
         userLocation.lng
       ).then((resp) => {
-        console.log(resp.data.hospitals.results);
-        const joinedPlaces=specificHospitals.concat(resp.data.hospitals.results)
-        
-
-        console.log(joinedPlaces)
-        
-        setBusinessList(joinedPlaces);
-        console.log(businessList)
-        setBusinessListOrg(joinedPlaces);
+        const joinedPlaces = specificHospitals.concat(resp.data.hospitals.results);
+  
+        const placesWithDistance = joinedPlaces?.map((place) => {
+          const distance = calculateDistance(
+            place.geometry.location.lat,
+            place.geometry.location.lng,
+            userLocation.lat,
+            userLocation.lng
+          );
+          return { ...place, distance };
+        });
+  
+        const sortedPlaces = placesWithDistance?.sort((a, b) => a.distance - b.distance);
+  
+        setBusinessList(sortedPlaces);
+        setBusinessListOrg(sortedPlaces); // Assuming you need an unsorted copy
         setLoading(false);
       });
     }
-  };
+  }, [category, radius, userLocation])
+
+
 
   return (
+
     <div className="px-1 ">
+      
       <GoogleMapView businessList={businessList} />
       <div className="mb-10">
-        {!loading ? (
+        {!loading  ? (
           <BusinessList businessList={businessList} />
         ) : (
           <div className="flex gap-3">
@@ -114,3 +121,29 @@ export default function Home() {
     </div>
   );
 }
+
+
+
+
+const calculateDistance = (lat1, lon1, lat2, lon2) => {
+  
+  const earthRadius = 6371; // in kilometers
+
+  const degToRad = (deg) => {
+    return deg * (Math.PI / 180);
+  };
+
+  const dLat = degToRad(lat2 - lat1);
+  const dLon = degToRad(lon2 - lon1);
+
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(degToRad(lat1)) * Math.cos(degToRad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  const distance = earthRadius * c;
+ 
+  return distance.toFixed(2); // Return the distance with 2 decimal places
+};
+
